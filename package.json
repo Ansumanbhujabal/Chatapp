@@ -10,7 +10,7 @@
   "main": "server.js",
   "devDependencies": {},
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon backend/server.js"
   },
   "author": "Ansu",
   "license": "ISC"
