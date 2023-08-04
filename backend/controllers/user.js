@@ -28,7 +28,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const existingUser = await user.findOne({ email });
+    const existingUser = await user.findOne({ email }).select("+password");
     if (!existingUser) {
       return res.status(400).json({
         success: false,
@@ -42,5 +42,22 @@ exports.login = async (req, res) => {
         message: "Incorrect Password",
       });
     }
-  } catch (error) {}
+    const token = await existingUser.genrateToken();
+
+    res
+      .status(200)
+      .cookie("token", token, {
+        expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      })
+      .json({
+        success: true,
+        user: existingUser,
+        token,
+      });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
