@@ -55,6 +55,6 @@ userSchema.methods.matchPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 userSchema.methods.genrateToken = async function () {
-  return jwt.sign({ id: this.id }, process.env.JWT_SECRET);
+  return jwt.sign({ _id: this._id }, process.env.JWT_SECRET);
 };
 module.exports = mongoose.model("user", userSchema);

@@ -16,7 +16,17 @@ exports.register = async (req, res) => {
       avatar: { public_id: "string", url: "string" },
     });
 
-    res.status(201).json({ success: true, user: newUser });
+    const token = await newUser.genrateToken();
+    const options = {
+      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    };
+
+    res.status(201).cookie("token", token, options).json({
+      success: true,
+      user: newUser,
+      token,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -43,17 +53,16 @@ exports.login = async (req, res) => {
       });
     }
     const token = await existingUser.genrateToken();
+    const options = {
+      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    };
 
-    res
-      .status(200)
-      .cookie("token", token, {
-        expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-      })
-      .json({
-        success: true,
-        user: existingUser,
-        token,
-      });
+    res.status(200).cookie("token", token, options).json({
+      success: true,
+      user: existingUser,
+      token,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
