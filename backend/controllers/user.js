@@ -70,3 +70,42 @@ exports.login = async (req, res) => {
     });
   }
 };
+
+exports.followUser = async (req, res) => {
+  try {
+    const userToFollow = await user.findById(req.params.id);
+    const loggedinUser = await user.findById(req.user._id);
+    if (!userToFollow) {
+      return res.status(404).json({
+        success: false,
+        message: "user not found",
+      });
+    }
+    if (loggedinUser.following.includes(userToFollow._id)) {
+      const indexfollowing = loggedinUser.following.indexOf(userToFollow._id);
+      const indexfollower = userToFollow.followers.indexOf(loggedinUser._id);
+      loggedinUser.following.splice(indexfollowing, 1);
+      userToFollow.followers.splice(indexfollower, 1);
+      await loggedinUser.save();
+      await userToFollow.save();
+      return res.status(200).json({
+        success: true,
+        message: "User Unfollowed ",
+      });
+    } else {
+      loggedinUser.following.push(userToFollow._id);
+      userToFollow.followers.push(loggedinUser._id);
+      await loggedinUser.save();
+      await userToFollow.save();
+      return res.status(200).json({
+        success: true,
+        message: "User Followed ",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
