@@ -129,8 +129,15 @@ exports.followUser = async (req, res) => {
 
 exports.updatePassword = async (req, res) => {
   try {
-    const loggedinUser = await user.findById(req.user._id);
+    const loggedinUser = await user.findById(req.user._id).select("+password");
     const { oldPassword, newPassword } = req.body;
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide Old and new Password",
+      });
+    }
+
     const isMatch = await loggedinUser.matchPassword(oldPassword);
     if (!isMatch) {
       return res.status(404).json({
@@ -143,6 +150,32 @@ exports.updatePassword = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Password Updated",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const loggedinUser = await user.findById(req.user._id).select("+name");
+    const { name, email } = req.body;
+    if (name) {
+      loggedinUser.name = name;
+    }
+    if (email) {
+      loggedinUser.email = email;
+    }
+
+    //avatar
+
+    await loggedinUser.save();
+    res.status(200).json({
+      success: true,
+      message: "Profile Updated ",
     });
   } catch (error) {
     res.status(500).json({
