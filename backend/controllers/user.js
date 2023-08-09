@@ -1,4 +1,5 @@
 const user = require("../models/user");
+const post = require("../models/post");
 
 exports.register = async (req, res) => {
   try {
@@ -208,6 +209,21 @@ exports.deleteMyProfile = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Account Deleted successfully ",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.myProfile = async (req, res) => {
+  try {
+    const loggedinUser = await user.findById(req.user._id).populate("posts");
+    res.status(200).json({
+      success: true,
+      user: loggedinUser,
     });
   } catch (error) {
     res.status(500).json({
