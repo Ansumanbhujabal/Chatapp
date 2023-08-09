@@ -98,15 +98,44 @@ exports.likeAndUnlikePost = async (req, res) => {
 
 exports.getPostOfFollowing = async (req, res) => {
   try {
-    const loggedinUser = await user.findById(req.user._id);
+    const posttoUpdate = await user.findById(req.user._id);
     const theirPost = await post.find({
       owner: {
-        $in: loggedinUser.following,
+        $in: posttoUpdate.following,
       },
     });
     res.status(200).json({
       success: true,
       theirPost,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.updateCaption = async (req, res) => {
+  try {
+    const posttoUpdate = await post.findById(req.params.id);
+    if (!posttoUpdate) {
+      return res.status(404).json({
+        success: false,
+        message: "post not found",
+      });
+    }
+    if (posttoUpdate.owner.toString() !== req.user._id.toString()) {
+      return res.status(404).json({
+        success: false,
+        message: "UnAuthorized access",
+      });
+    }
+    posttoUpdate.caption = req.body.caption;
+    await posttoUpdate.save();
+    res.status(200).json({
+      success: true,
+      message: "Caption  Updated ",
     });
   } catch (error) {
     res.status(500).json({
