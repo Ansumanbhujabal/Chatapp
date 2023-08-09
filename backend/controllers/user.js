@@ -184,3 +184,35 @@ exports.updateProfile = async (req, res) => {
     });
   }
 };
+
+exports.deleteMyProfile = async (req, res) => {
+  try {
+    const loggedinUser = await user.findById(req.user._id);
+    const userPost = loggedinUser.posts;
+    await user.deleteOne({ _id: req.user._id });
+
+    //logout user after delete
+
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    });
+
+    //Al post delete
+
+    for (let i = 0; i < userPost.length; i++) {
+      const onePost = await post.findById(userPost[i]);
+      await onePost.deleteOne();
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Account Deleted successfully ",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
