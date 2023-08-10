@@ -190,6 +190,9 @@ exports.deleteMyProfile = async (req, res) => {
   try {
     const loggedinUser = await user.findById(req.user._id);
     const userPost = loggedinUser.posts;
+    const followersOfuser = loggedinUser.followers;
+    const userId = loggedinUser._id;
+    const userFollowing = loggedinUser.following;
     await user.deleteOne({ _id: req.user._id });
 
     //logout user after delete
@@ -204,6 +207,48 @@ exports.deleteMyProfile = async (req, res) => {
     for (let i = 0; i < userPost.length; i++) {
       const onePost = await post.findById(userPost[i]);
       await onePost.deleteOne();
+    }
+
+    //Removing user from followers following
+
+    // for (let i = 0; i < followersOfuser.length; i++) {
+    //   const oneFollower = await user.findById(followersOfuser[i]);
+    //   const index = oneFollower.userFollowing.indexOf(userId);
+    //   oneFollower.userFollowing.splice(index, 1);
+    //   await oneFollower.save();
+    // }
+
+    for (let i = 0; i < followersOfuser.length; i++) {
+      const followerId = followersOfuser[i];
+      const follower = await user.findById(followerId);
+      if (follower) {
+        const index = follower.following.indexOf(userId);
+        if (index !== -1) {
+          follower.following.splice(index, 1);
+          await follower.save();
+        }
+      }
+    }
+
+    // Removing User from Following's Followers
+    // for (let i = 0; i < userFollowing.length; i++) {
+    //   const follows = await user.findById(userFollowing[i]);
+
+    //   const index = follows.followersOfuser.indexOf(userId);
+    //   follows.followersOfuser.splice(index, 1);
+    //   await follows.save();
+    // }
+
+    for (let i = 0; i < userFollowing.length; i++) {
+      const followsId = userFollowing[i];
+      const follows = await user.findById(followsId);
+      if (follows) {
+        const index = follows.followers.indexOf(userId);
+        if (index !== -1) {
+          follows.followers.splice(index, 1);
+          await follows.save();
+        }
+      }
     }
 
     res.status(200).json({
