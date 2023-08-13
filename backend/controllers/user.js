@@ -352,3 +352,36 @@ exports.forgotPassword = async (req, res) => {
     });
   }
 };
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const resetPasswordTokenhere = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+    const loggedinUser = await user.findOne({
+      resetPasswordToken: resetPasswordTokenhere,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!loggedinUser) {
+      return res.status(401).json({
+        success: false,
+        message: "Token Invalid",
+      });
+    }
+    loggedinUser.password = req.body.password;
+    loggedinUser.resetPasswordToken = undefined;
+    loggedinUser.resetPasswordExpire = undefined;
+    await loggedinUser.save();
+    res.status(200).json({
+      success: true,
+      message: "Possword Reset Successful",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
