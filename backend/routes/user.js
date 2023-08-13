@@ -10,6 +10,7 @@ const {
   myProfile,
   getUserProfile,
   getAllUserProfile,
+  forgotPassword,
 } = require("../controllers/user");
 const { isAuthenticated } = require("../middlewares/auth");
 const router = express.Router();
@@ -27,4 +28,7 @@ router.route("/update/profile").put(isAuthenticated, updateProfile);
 
 router.route("/user/:id").get(isAuthenticated, getUserProfile);
 router.route("/users").get(isAuthenticated, getAllUserProfile);
+
+router.route("/forgot/password").post(isAuthenticated, forgotPassword);
+
 module.exports = router;

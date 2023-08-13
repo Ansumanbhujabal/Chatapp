@@ -1,5 +1,7 @@
 const user = require("../models/user");
 const post = require("../models/post");
+const { sendEmail } = require("../middlewares/sendEmail");
+const crypto = require("crypto");
 
 exports.register = async (req, res) => {
   try {
@@ -294,6 +296,55 @@ exports.getAllUserProfile = async (req, res) => {
       success: true,
       user: anyuser,
     });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  try {
+    const loggedinUser = await user.findOne({ email: req.body.email });
+    if (!loggedinUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User Not Found ",
+      });
+    }
+    const resetPasswordToken = loggedinUser.getResetPasswordToken();
+    // console.log(resetPasswordToken);
+    // console.log(resetPasswordExpire);
+    await loggedinUser.save();
+
+    const resetUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/api/v1/password/reset/${resetPasswordToken}`;
+    const messageForUser = `We received a request to reset the password for your account. 
+    If you did not initiate this request, please ignore this email. 
+    If you did request a password reset, please follow the instructions below.To reset your password,
+    
+     please click on the link below or copy and paste it into your web browser's address bar  \n \n ${resetUrl}`;
+    try {
+      await sendEmail({
+        email: loggedinUser.email,
+        subject: "Reset Password",
+        messageForUser,
+      });
+      res.status(200).json({
+        success: true,
+        message: `Email sent to ${loggedinUser.email}`,
+      });
+    } catch (error) {
+      loggedinUser.resetPasswordToken = undefined;
+      loggedinUser.resetPasswordExpire = undefined;
+      await loggedinUser.save();
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
   } catch (error) {
     res.status(500).json({
       success: false,
