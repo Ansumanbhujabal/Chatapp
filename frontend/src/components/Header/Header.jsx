@@ -13,8 +13,8 @@ import {
 } from "@mui/icons-material";
 
 const Header = () => {
-  const [tab, setTab] = useState("/");
-  console.log(tab);
+  const [tab, setTab] = useState(window.location.pathname);
+  console.log(window.location.pathname);
   return (
     <div className="header">
       <Link to="/" onClick={() => setTab("/")}>
