@@ -1,4 +1,4 @@
-# MERN Chat App
+# MERN SocialMedia Chat App
 
 ## Features
 - **User Registration:** Users can create accounts by providing a unique username and password.
