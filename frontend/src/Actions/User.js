@@ -21,3 +21,23 @@ export const loginUser = (email, password) => async (dispatch) => {
     });
   }
 };
+
+export const loadUser = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LoadUserRequest",
+    });
+
+    const { data } = await axios.get("/api/v1/me");
+
+    dispatch({
+      type: "LoadUserSuccess",
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LoadUserFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
