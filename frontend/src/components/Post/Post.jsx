@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Post.css";
 import { Link } from "react-router-dom";
 import { Avatar, Typography, Button } from "@mui/material";
@@ -22,6 +22,11 @@ const Post = ({
   isDelete = false,
   isAccount = false,
 }) => {
+  const [liked, setLiked] = useState(false);
+  const handleLike = () => {
+    setLiked(!liked);
+  };
+
   return (
     <div className="post">
       <div className="postHeader"></div>
@@ -59,8 +64,8 @@ const Post = ({
         <Typography>{5} Likes</Typography>
       </button>
       <div className="postFooter">
-        <Button>
-          <FavoriteBorder />
+        <Button onClick={handleLike}>
+          {liked ? <Favorite style={{ color: "red" }} /> : <FavoriteBorder />}
         </Button>
         <Button>
           <ChatBubbleOutline />
