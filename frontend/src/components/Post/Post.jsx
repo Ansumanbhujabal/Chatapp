@@ -70,9 +70,11 @@ const Post = ({
         <Button>
           <ChatBubbleOutline />
         </Button>
-        <Button>
-          <DeleteOutline />
-        </Button>
+        {isDelete ? (
+          <Button>
+            <DeleteOutline />
+          </Button>
+        ) : null}
       </div>
     </div>
   );
