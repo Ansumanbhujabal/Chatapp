@@ -1,8 +1,14 @@
 import React from "react";
 import "./Post.css";
 import { Link } from "react-router-dom";
-
-import { Avatar, Typography } from "@mui/material";
+import { Avatar, Typography, Button } from "@mui/material";
+import {
+  MoreVert,
+  Favorite,
+  FavoriteBorder,
+  ChatBubbleOutline,
+  DeleteOutline,
+} from "@mui/icons-material";
 
 const Post = ({
   postId,
@@ -41,6 +47,27 @@ const Post = ({
         >
           {caption}
         </Typography>
+      </div>
+      <button
+        style={{
+          border: "none",
+          backgroundColor: "white",
+          cursor: "pointer",
+          margin: "1vmax 2vmax",
+        }}
+      >
+        <Typography>{5} Likes</Typography>
+      </button>
+      <div className="postFooter">
+        <Button>
+          <FavoriteBorder />
+        </Button>
+        <Button>
+          <ChatBubbleOutline />
+        </Button>
+        <Button>
+          <DeleteOutline />
+        </Button>
       </div>
     </div>
   );

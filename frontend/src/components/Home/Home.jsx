@@ -8,7 +8,7 @@ const Home = () => {
     <div className="home">
       <div className="homeleft">
         <Post
-          caption={"Not all Greens are safe"}
+          caption={" Green means safe"}
           postImage={
             "https://media.istockphoto.com/id/495609237/photo/large-eyed-green-pitviper.jpg?s=612x612&w=0&k=20&c=4_xLDtkAjKVSpfCWIodQMcZAWFlqvdx1emo35Pg1CP0="
           }
