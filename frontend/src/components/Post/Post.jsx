@@ -29,7 +29,13 @@ const Post = ({
 
   return (
     <div className="post">
-      <div className="postHeader"></div>
+      <div className="postHeader">
+        {isAccount ? (
+          <Button>
+            <MoreVert />
+          </Button>
+        ) : null}
+      </div>
       <img src={postImage} alt="post" />
       <div className="postDetails">
         <Avatar
