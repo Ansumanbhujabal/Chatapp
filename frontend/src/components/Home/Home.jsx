@@ -9,7 +9,7 @@ const Home = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getFollowingPosts());
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className="home">
