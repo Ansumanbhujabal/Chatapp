@@ -99,11 +99,13 @@ exports.likeAndUnlikePost = async (req, res) => {
 exports.getPostOfFollowing = async (req, res) => {
   try {
     const posttoUpdate = await user.findById(req.user._id);
-    const theirPost = await post.find({
-      owner: {
-        $in: posttoUpdate.following,
-      },
-    });
+    const theirPost = await post
+      .find({
+        owner: {
+          $in: posttoUpdate.following,
+        },
+      })
+      .populate("owner likes comments.user");
     res.status(200).json({
       success: true,
       posts: theirPost.reverse(),
