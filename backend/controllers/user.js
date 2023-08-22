@@ -294,7 +294,7 @@ exports.getAllUserProfile = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      user: anyuser,
+      users: anyuser,
     });
   } catch (error) {
     res.status(500).json({
