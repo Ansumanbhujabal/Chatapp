@@ -6,7 +6,6 @@ export const likePost = (id) => async (dispatch) => {
       type: "likeRequest",
     });
     const { data } = await axios.get(`/api/v1/post/${id}`);
-    console.log(data.users);
 
     dispatch({
       type: "likeSuccess",
