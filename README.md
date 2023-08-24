@@ -30,13 +30,14 @@ We've harnessed top-notch technologies to craft an unparalleled user experience:
 
 - **Deployment Magic:** Seamlessly deploy your app on platforms like Heroku, AWS, or Vercel to share it with the world.
 
-## Get Started on Your Journey
 
-Embark on your MERN Chat App adventure through these simple steps:
 
 ### Prerequisites for Magic
 - Ensure Node.js and npm (Node Package Manager) are installed on your system.
 - Prepare a MongoDB database or MongoDB Atlas account to store your app's data.
+  ## Get Started on Your Journey
+
+Embark on your MERN Chat App adventure through these simple steps:
 
 ### Unveiling the Spell
 1. Clone the mystical repository: `git clone https://github.com/your-username/mern-chat-app.git`
