@@ -11,6 +11,7 @@ import {
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { likePost } from "../../Actions/post";
+import { toast } from "react-toastify";
 
 const Post = ({
   postId,
@@ -27,10 +28,13 @@ const Post = ({
   const [liked, setLiked] = useState(false);
 
   const dispatch = useDispatch();
+  // const alert = useAlert();
 
   const handleLike = () => {
     setLiked(!liked);
     dispatch(likePost(postId));
+    // alert.success('Liked')
+    toast.success("Liked");
   };
 
   return (
