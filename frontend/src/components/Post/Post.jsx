@@ -10,7 +10,7 @@ import {
   DeleteOutline,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { likePost } from "../../Actions/post";
+import { addCommentOnPost, likePost } from "../../Actions/post";
 import { getAllUsers, getFollowingPosts } from "../../Actions/User";
 import User from "../User/User";
 
@@ -28,6 +28,8 @@ const Post = ({
 }) => {
   const [liked, setLiked] = useState(false);
   const [likesUser, setLikesUser] = useState(false);
+  const [commentValue, setCommentValue] = useState(" ");
+  const [commentToggle, setCommentToggle] = useState(false);
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -35,6 +37,17 @@ const Post = ({
   const handleLike = async () => {
     setLiked(!liked);
     await dispatch(likePost(postId));
+    if (isAccount) {
+      console.log("Hee HEE");
+    } else {
+      dispatch(getFollowingPosts());
+    }
+  };
+
+  const addCommentHandler = async (e) => {
+    e.preventDefault();
+    await dispatch(addCommentOnPost(postId, commentValue));
+
     if (isAccount) {
       console.log("Hee HEE");
     } else {
@@ -98,7 +111,7 @@ const Post = ({
         <Button onClick={handleLike}>
           {liked ? <Favorite style={{ color: "red" }} /> : <FavoriteBorder />}
         </Button>
-        <Button>
+        <Button onClick={() => setCommentToggle(!commentToggle)}>
           <ChatBubbleOutline />
         </Button>
         {isDelete ? (
@@ -107,6 +120,28 @@ const Post = ({
           </Button>
         ) : null}
       </div>
+      <Dialog
+        open={commentToggle}
+        onClose={() => setCommentToggle(!commentToggle)}
+      >
+        <div className="DialogBox">
+          <Typography variant="h4"> Comments</Typography>
+
+          <form className="commentForm" onSubmit={addCommentHandler}>
+            <input
+              type="text"
+              value={commentValue}
+              onChange={(e) => setCommentValue(e.target.value)}
+              placeholder="Comment Here"
+              required
+            />
+            <Button type="submit" variant="conatined">
+              Add
+            </Button>
+          </form>
+        </div>
+      </Dialog>
+
       <Dialog open={likesUser} onClose={() => setLikesUser(!likesUser)}>
         <div className="DialogBox">
           <Typography variant="h4">Liked By </Typography>
