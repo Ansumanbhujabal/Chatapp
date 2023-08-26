@@ -13,6 +13,17 @@ export const likeReducer = createReducer(initialState, {
     state.loading = false;
     state.error = action.payload;
   },
+  addCommentRequest: (state) => {
+    state.loading = true;
+  },
+  addCommentSuccess: (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  },
+  addCommentFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
   clearErrors: (state) => {
     state.error = null;
   },
