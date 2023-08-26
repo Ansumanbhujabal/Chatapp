@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Post.css";
 import { Link } from "react-router-dom";
 import { Avatar, Typography, Button } from "@mui/material";
@@ -9,8 +9,9 @@ import {
   ChatBubbleOutline,
   DeleteOutline,
 } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { likePost } from "../../Actions/post";
+import { getAllUsers, getFollowingPosts } from "../../Actions/User";
 
 const Post = ({
   postId,
@@ -27,11 +28,25 @@ const Post = ({
   const [liked, setLiked] = useState(false);
 
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
 
-  const handleLike = () => {
+  const handleLike = async () => {
     setLiked(!liked);
-    dispatch(likePost(postId));
+    await dispatch(likePost(postId));
+    if (isAccount) {
+      console.log("Hee HEE");
+    } else {
+      dispatch(getFollowingPosts());
+    }
   };
+
+  useEffect(() => {
+    likes.forEach((item) => {
+      if (item._id === user._id) {
+        setLiked(true);
+      }
+    });
+  }, [likes, , user._id]);
 
   return (
     <div className="post">
@@ -73,7 +88,7 @@ const Post = ({
           margin: "1vmax 2vmax",
         }}
       >
-        <Typography>{5} Likes</Typography>
+        <Typography>{likes.length} Likes</Typography>
       </button>
       <div className="postFooter">
         <Button onClick={handleLike}>
