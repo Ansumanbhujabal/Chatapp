@@ -32,7 +32,7 @@ const Home = () => {
       toast.success(message);
       dispatch({ type: "clearMessages" });
     }
-  }, [toast, likeError, message]);
+  }, [toast, likeError, message, error, dispatch]);
 
   return loading === true || userLoading === true ? (
     <Loader />
