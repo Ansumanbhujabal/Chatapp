@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import "./CommentCard.css";
 import { Delete } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
+import { deleteCommentOnPost } from "../../Actions/post";
+import { getAllUsers, getFollowingPosts } from "../../Actions/User";
 const CommentCard = ({
   userId,
   name,
@@ -15,9 +17,15 @@ const CommentCard = ({
   isAccount,
 }) => {
   const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
-  const deleteCommentHandler = () => {
-    console.log("Delete");
+  const deleteCommentHandler = async () => {
+    await dispatch(deleteCommentOnPost(postId, commentId));
+    if (isAccount) {
+      console.log("Hee HEE");
+    } else {
+      dispatch(getFollowingPosts());
+    }
   };
 
   return (
