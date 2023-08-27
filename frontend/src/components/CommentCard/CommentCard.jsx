@@ -14,6 +14,12 @@ const CommentCard = ({
   postId,
   isAccount,
 }) => {
+  const { user } = useSelector((state) => state.user);
+
+  const deleteCommentHandler = () => {
+    console.log("Delete");
+  };
+
   return (
     <div className="commentUser">
       <Link to={`/user/${userId}`}>
@@ -21,9 +27,15 @@ const CommentCard = ({
         <Typography style={{ minWidth: "6vmax" }}>{name}</Typography>
       </Link>
       <Typography>{comment}</Typography>
-      <Button>
-        <Delete />
-      </Button>
+      {isAccount ? (
+        <Button onClick={deleteCommentHandler}>
+          <Delete />
+        </Button>
+      ) : userId === user._id ? (
+        <Button onClick={deleteCommentHandler}>
+          <Delete />
+        </Button>
+      ) : null}
     </div>
   );
 };

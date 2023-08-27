@@ -149,8 +149,8 @@ const Post = ({
                 avatar={item.user.avatar.url}
                 comment={item.comment}
                 commentId={item._id}
-                postId
-                isAccount
+                postId={postId}
+                isAccount={isAccount}
               />
             ))
           ) : (
