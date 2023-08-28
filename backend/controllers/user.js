@@ -266,6 +266,28 @@ exports.myProfile = async (req, res) => {
   }
 };
 
+exports.getMyPosts = async (req, res) => {
+  try {
+    const loggedinUser = await user.findById(req.user._id);
+    const allposts = [];
+    for (let i = 0; i < loggedinUser.posts.length; i++) {
+      const onepost = await post
+        .findById(loggedinUser.posts[i])
+        .populate("likes comments.user");
+      allposts.push(onepost);
+    }
+    res.status(200).json({
+      success: true,
+      posts: allposts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 exports.getUserProfile = async (req, res) => {
   try {
     const anyuser = await user.findById(req.params.id).populate("posts");
