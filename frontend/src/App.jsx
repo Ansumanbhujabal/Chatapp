@@ -6,6 +6,7 @@ import Login from "./components/Login/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "./Actions/User";
 import Home from "./components/Home/Home";
+import Account from "./components/Account/Account";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,6 +22,10 @@ function App() {
 
       <Routes>
         <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
+        <Route
+          path="/account"
+          element={isAuthenticated ? <Account /> : <Login />}
+        />
       </Routes>
     </Router>
   );
