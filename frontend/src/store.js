@@ -4,7 +4,7 @@ import {
   postOfFollowingReducer,
   userReducer,
 } from "./Reducers/user";
-import { likeReducer } from "./Reducers/post";
+import { likeReducer, myPostsReducer } from "./Reducers/post";
 // const initializeState = {};
 const store = configureStore({
   reducer: {
@@ -12,6 +12,7 @@ const store = configureStore({
     postofFollowing: postOfFollowingReducer,
     allUsers: allUsersReducer,
     like: likeReducer,
+    myPosts: myPostsReducer,
   },
 });
 export default store;
