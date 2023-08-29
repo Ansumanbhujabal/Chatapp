@@ -41,7 +41,10 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const existingUser = await user.findOne({ email }).select("+password");
+    const existingUser = await user
+      .findOne({ email })
+      .select("+password")
+      .populate("posts followers following");
     if (!existingUser) {
       return res.status(400).json({
         success: false,
