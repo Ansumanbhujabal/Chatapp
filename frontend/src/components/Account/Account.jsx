@@ -5,11 +5,12 @@ import { getmyposts } from "../../Actions/User";
 import Loader from "../Loader/Loader";
 import Post from "../Post/Post";
 import { toast } from "react-toastify";
-import { Typography } from "@mui/material";
+import { Avatar, Button, Dialog, Typography } from "@mui/material";
 
 const Account = () => {
   const dispatch = useDispatch();
   const { loading, error, posts } = useSelector((state) => state.myPosts);
+  const { user, loading: userLoading } = useSelector((state) => state.user);
 
   console.log(posts);
   const { error: likeError, message } = useSelector((state) => state.like);
@@ -29,7 +30,7 @@ const Account = () => {
     }
   }, [toast, likeError, message, error, dispatch]);
 
-  return loading ? (
+  return loading === true || userLoading === true ? (
     <Loader />
   ) : (
     <div className="account">
@@ -46,13 +47,22 @@ const Account = () => {
               ownerImage={post.owner.avatar.url}
               ownerName={post.owner.name}
               ownerId={post.owner._id}
+              isAccount={true}
+              isDelete={true}
             />
           ))
         ) : (
           <Typography variant="h6">No posts yet</Typography>
         )}
       </div>
-      <div className="accountright"></div>
+      <div className="accountright">
+        <Avatar
+          src={user.avatar.url}
+          sx={{ height: "8vmax", width: "8vmax" }}
+        />
+
+        <Typography variant="h5">{user.name}</Typography>
+      </div>
     </div>
   );
 };
