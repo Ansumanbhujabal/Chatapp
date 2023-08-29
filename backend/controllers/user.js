@@ -253,7 +253,9 @@ exports.deleteMyProfile = async (req, res) => {
 
 exports.myProfile = async (req, res) => {
   try {
-    const loggedinUser = await user.findById(req.user._id).populate("posts");
+    const loggedinUser = await user
+      .findById(req.user._id)
+      .populate("posts followers following");
     res.status(200).json({
       success: true,
       user: loggedinUser,
@@ -290,7 +292,9 @@ exports.getMyPosts = async (req, res) => {
 
 exports.getUserProfile = async (req, res) => {
   try {
-    const anyuser = await user.findById(req.params.id).populate("posts");
+    const anyuser = await user
+      .findById(req.params.id)
+      .populate("posts followers following");
 
     if (!anyuser) {
       res.status(404).json({
