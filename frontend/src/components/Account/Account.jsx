@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Account.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getmyposts } from "../../Actions/User";
+import { getmyposts, logoutUser } from "../../Actions/User";
 import Loader from "../Loader/Loader";
 import Post from "../Post/Post";
+import User from "../User/User";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 import { Avatar, Button, Dialog, Typography } from "@mui/material";
 
 const Account = () => {
@@ -14,6 +16,19 @@ const Account = () => {
 
   console.log(posts);
   const { error: likeError, message } = useSelector((state) => state.like);
+
+  const [followersToggle, setFollowersToggle] = useState(false);
+
+  const [followingToggle, setFollowingToggle] = useState(false);
+  const logoutHandler = () => {
+    dispatch(logoutUser());
+    toast.success("Logged out successfully");
+  };
+
+  const deleteProfileHandler = async () => {
+    // await dispatch(deleteMyProfile());
+    dispatch(logoutUser());
+  };
 
   useEffect(() => {
     dispatch(getmyposts());
@@ -85,6 +100,61 @@ const Account = () => {
         </Button>
 
         <Link to="/update/profile">Edit Profile</Link>
+        <Link to="/update/password">Change Password</Link>
+        <Button
+          variant="text"
+          style={{ color: "red", margin: "2vmax" }}
+          onClick={deleteProfileHandler}
+          // disabled={deleteLoading}
+        >
+          Delete My Profile
+        </Button>
+        <Dialog
+          open={followersToggle}
+          onClose={() => setFollowersToggle(!followersToggle)}
+        >
+          <div className="DialogBox">
+            <Typography variant="h4">Followers</Typography>
+
+            {user && user.followers.length > 0 ? (
+              user.followers.map((follower) => (
+                <User
+                  key={follower._id}
+                  userId={follower._id}
+                  name={follower.name}
+                  avatar={follower.avatar.url}
+                />
+              ))
+            ) : (
+              <Typography style={{ margin: "2vmax" }}>
+                You have no followers
+              </Typography>
+            )}
+          </div>
+        </Dialog>
+        <Dialog
+          open={followingToggle}
+          onClose={() => setFollowingToggle(!followingToggle)}
+        >
+          <div className="DialogBox">
+            <Typography variant="h4">Following</Typography>
+
+            {user && user.following.length > 0 ? (
+              user.following.map((follow) => (
+                <User
+                  key={follow._id}
+                  userId={follow._id}
+                  name={follow.name}
+                  avatar={follow.avatar.url}
+                />
+              ))
+            ) : (
+              <Typography style={{ margin: "2vmax" }}>
+                You're not following anyone
+              </Typography>
+            )}
+          </div>
+        </Dialog>
       </div>
     </div>
   );
