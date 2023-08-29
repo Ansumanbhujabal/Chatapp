@@ -62,6 +62,29 @@ const Account = () => {
         />
 
         <Typography variant="h5">{user.name}</Typography>
+        <div>
+          <button onClick={() => setFollowersToggle(!followersToggle)}>
+            <Typography>Followers</Typography>
+          </button>
+          <Typography>{user.followers.length}</Typography>
+        </div>
+
+        <div>
+          <button onClick={() => setFollowingToggle(!followingToggle)}>
+            <Typography>Following</Typography>
+          </button>
+          <Typography>{user.following.length}</Typography>
+        </div>
+        <div>
+          <Typography>Posts</Typography>
+          <Typography>{user.posts.length}</Typography>
+        </div>
+
+        <Button variant="contained" onClick={logoutHandler}>
+          Logout
+        </Button>
+
+        <Link to="/update/profile">Edit Profile</Link>
       </div>
     </div>
   );
