@@ -48,19 +48,19 @@ export const userReducer = createReducer(initialState, {
     state.error = null;
   },
 
-  // LogoutUserRequest: (state) => {
-  //   state.loading = true;
-  // },
-  // LogoutUserSuccess: (state) => {
-  //   state.loading = false;
-  //   state.user = null;
-  //   state.isAuthenticated = false;
-  // },
-  // LogoutUserFailure: (state, action) => {
-  //   state.loading = false;
-  //   state.error = action.payload;
-  //   state.isAuthenticated = true;
-  // },
+  LogoutUserRequest: (state) => {
+    state.loading = true;
+  },
+  LogoutUserSuccess: (state) => {
+    state.loading = false;
+    state.user = null;
+    state.isAuthenticated = false;
+  },
+  LogoutUserFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+    state.isAuthenticated = true;
+  },
 });
 export const postOfFollowingReducer = createReducer(initialState, {
   postOfFollowingRequest: (state) => {
