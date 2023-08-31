@@ -12,6 +12,14 @@ const NewPost = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    const Reader = new FileReader();
+    Reader.onload = (e) => {
+      if (Reader.readyState === 2) {
+        setImage(Reader.result);
+      }
+    };
+
+    Reader.readAsDataURL(file);
   };
 
   const { loading, error, message } = useSelector((state) => state.like);
