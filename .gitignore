@@ -3,3 +3,4 @@ config.env
 backend/config/config.env
 backend/config/config.env
 *.env
+backend/config/config.env
