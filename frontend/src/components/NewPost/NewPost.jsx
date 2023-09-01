@@ -2,7 +2,7 @@ import { Button, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-// import { createNewPost } from "../../Actions/Post";
+import { createNewPost } from "../../Actions/post";
 import { loadUser } from "../../Actions/User";
 import "./NewPost.css";
 
@@ -25,9 +25,25 @@ const NewPost = () => {
   const { loading, error, message } = useSelector((state) => state.like);
   const dispatch = useDispatch();
 
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(createNewPost(caption, image));
+  };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch({ type: "clearErrors" });
+    }
+    if (message) {
+      toast.success(message);
+      dispatch({ type: "clearMessages" });
+    }
+  }, [dispatch, error, message]);
+
   return (
     <div className="newPost">
-      <form className="newPostForm">
+      <form className="newPostForm" onSubmit={submitHandler}>
         <Typography variant="h3">New Post</Typography>
         {image && <img src={image} alt="post" />}
         <input type="file" accept="image/" onChange={handleImageChange} />
@@ -37,7 +53,9 @@ const NewPost = () => {
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
         />
-        <Button type="submit">Post</Button>
+        <Button disabled={loading} type="submit">
+          Post
+        </Button>
       </form>
     </div>
   );
