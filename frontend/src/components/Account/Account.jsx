@@ -11,10 +11,10 @@ import { Avatar, Button, Dialog, Typography } from "@mui/material";
 
 const Account = () => {
   const dispatch = useDispatch();
-  const { loading, error, posts } = useSelector((state) => state.myPosts);
   const { user, loading: userLoading } = useSelector((state) => state.user);
+  const { loading, error, posts } = useSelector((state) => state.myPosts);
 
-  console.log(posts);
+  console.log(user.posts.length);
   const { error: likeError, message } = useSelector((state) => state.like);
 
   const [followersToggle, setFollowersToggle] = useState(false);
@@ -35,6 +35,10 @@ const Account = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch({ type: "clearErrors" });
+    }
     if (likeError) {
       toast.error(likeError);
       dispatch({ type: "clearErrors" });
