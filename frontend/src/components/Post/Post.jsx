@@ -10,7 +10,12 @@ import {
   DeleteOutline,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { addCommentOnPost, likePost, updatePost } from "../../Actions/post";
+import {
+  addCommentOnPost,
+  deletePost,
+  likePost,
+  updatePost,
+} from "../../Actions/post";
 import { getAllUsers, getFollowingPosts } from "../../Actions/User";
 import User from "../User/User";
 import CommentCard from "../CommentCard/CommentCard";
@@ -62,6 +67,10 @@ const Post = ({
   const updatCaptionhandler = async (e) => {
     e.preventDefault();
     await dispatch(updatePost(captionValue, postId));
+    dispatch(getmyposts());
+  };
+  const deletePosthandler = async () => {
+    await dispatch(deletePost(postId));
     dispatch(getmyposts());
   };
 
@@ -125,7 +134,7 @@ const Post = ({
           <ChatBubbleOutline />
         </Button>
         {isDelete ? (
-          <Button>
+          <Button onClick={deletePosthandler}>
             <DeleteOutline />
           </Button>
         ) : null}
