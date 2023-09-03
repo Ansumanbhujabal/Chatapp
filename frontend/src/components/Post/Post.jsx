@@ -10,7 +10,7 @@ import {
   DeleteOutline,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { addCommentOnPost, likePost } from "../../Actions/post";
+import { addCommentOnPost, likePost, updatePost } from "../../Actions/post";
 import { getAllUsers, getFollowingPosts } from "../../Actions/User";
 import User from "../User/User";
 import CommentCard from "../CommentCard/CommentCard";
@@ -32,6 +32,8 @@ const Post = ({
   const [likesUser, setLikesUser] = useState(false);
   const [commentValue, setCommentValue] = useState(" ");
   const [commentToggle, setCommentToggle] = useState(false);
+  const [captionValue, setCaptionValue] = useState(caption);
+  const [captionToggle, setCaptionToggle] = useState(false);
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -57,6 +59,12 @@ const Post = ({
     }
   };
 
+  const updatCaptionhandler = async (e) => {
+    e.preventDefault();
+    await dispatch(updatePost(captionValue, postId));
+    dispatch(getmyposts());
+  };
+
   useEffect(() => {
     likes.forEach((item) => {
       if (item._id === user._id) {
@@ -69,7 +77,7 @@ const Post = ({
     <div className="post">
       <div className="postHeader">
         {isAccount ? (
-          <Button>
+          <Button onClick={() => setCaptionToggle(!captionToggle)}>
             <MoreVert />
           </Button>
         ) : null}
@@ -172,6 +180,29 @@ const Post = ({
               avatar={like.avatar.url}
             />
           ))}
+        </div>
+      </Dialog>
+      <Dialog
+        open={captionToggle}
+        onClose={() => setCaptionToggle(!captionToggle)}
+      >
+        <div className="DialogBox">
+          <Typography variant="h4">Update Caption</Typography>
+
+          <form className="commentForm" onSubmit={updatCaptionhandler}>
+            <input
+              key={postId._id}
+              type="text"
+              value={captionValue}
+              onChange={(e) => setCaptionValue(e.target.value)}
+              placeholder="Caption Here..."
+              required
+            />
+
+            <Button type="submit" variant="contained">
+              Update
+            </Button>
+          </form>
         </div>
       </Dialog>
     </div>
