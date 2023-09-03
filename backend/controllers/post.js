@@ -50,6 +50,7 @@ exports.deletePost = async (req, res) => {
       });
     }
     // await newPost.remove();
+    await cloudinary.v2.uploader.destroy(newPost.image.public_id);
     await post.deleteOne({ _id: req.params.id });
 
     const newuser = await user.findById(req.user._id);
