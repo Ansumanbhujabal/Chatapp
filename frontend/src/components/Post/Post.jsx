@@ -14,6 +14,7 @@ import { addCommentOnPost, likePost } from "../../Actions/post";
 import { getAllUsers, getFollowingPosts } from "../../Actions/User";
 import User from "../User/User";
 import CommentCard from "../CommentCard/CommentCard";
+import { getmyposts } from "../../Actions/User";
 
 const Post = ({
   postId,
@@ -39,7 +40,7 @@ const Post = ({
     setLiked(!liked);
     await dispatch(likePost(postId));
     if (isAccount) {
-      console.log("Hee HEE");
+      dispatch(getmyposts());
     } else {
       dispatch(getFollowingPosts());
     }
@@ -50,7 +51,7 @@ const Post = ({
     await dispatch(addCommentOnPost(postId, commentValue));
 
     if (isAccount) {
-      console.log("Hee HEE");
+      dispatch(getmyposts());
     } else {
       dispatch(getFollowingPosts());
     }

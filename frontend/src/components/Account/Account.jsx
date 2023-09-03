@@ -14,7 +14,6 @@ const Account = () => {
   const { user, loading: userLoading } = useSelector((state) => state.user);
   const { loading, error, posts } = useSelector((state) => state.myPosts);
 
-  console.log(posts);
   const { error: likeError, message } = useSelector((state) => state.like);
 
   const [followersToggle, setFollowersToggle] = useState(false);
