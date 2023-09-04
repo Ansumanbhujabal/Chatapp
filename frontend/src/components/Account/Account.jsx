@@ -13,7 +13,6 @@ const Account = () => {
   const dispatch = useDispatch();
   const { user, loading: userLoading } = useSelector((state) => state.user);
   const { loading, error, posts } = useSelector((state) => state.myPosts);
-
   const { error: likeError, message } = useSelector((state) => state.like);
 
   const [followersToggle, setFollowersToggle] = useState(false);
@@ -54,21 +53,23 @@ const Account = () => {
     <div className="account">
       <div className="accountleft">
         {posts && posts.length > 0 ? (
-          posts.map((post) => (
-            <Post
-              key={post._id}
-              postId={post._id}
-              caption={post.caption}
-              postImage={post.image.url}
-              likes={post.likes}
-              comments={post.comments}
-              ownerImage={post.owner.avatar.url}
-              ownerName={post.owner.name}
-              ownerId={post.owner._id}
-              isAccount={true}
-              isDelete={true}
-            />
-          ))
+          posts.map((post) =>
+            post && post._id ? ( // Check if post and _id are not null
+              <Post
+                key={post._id}
+                postId={post._id}
+                caption={post.caption}
+                postImage={post.image.url}
+                likes={post.likes}
+                comments={post.comments}
+                ownerImage={post.owner.avatar.url}
+                ownerName={post.owner.name}
+                ownerId={post.owner._id}
+                isAccount={true}
+                isDelete={true}
+              />
+            ) : null
+          )
         ) : (
           <Typography variant="h6">No posts yet</Typography>
         )}
