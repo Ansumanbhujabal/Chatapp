@@ -25,9 +25,10 @@ const NewPost = () => {
   const { loading, error, message } = useSelector((state) => state.like);
   const dispatch = useDispatch();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    dispatch(createNewPost(caption, image));
+    await dispatch(createNewPost(caption, image));
+    dispatch(loadUser());
   };
 
   useEffect(() => {

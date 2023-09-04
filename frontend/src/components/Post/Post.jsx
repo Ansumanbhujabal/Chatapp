@@ -16,7 +16,7 @@ import {
   likePost,
   updatePost,
 } from "../../Actions/post";
-import { getAllUsers, getFollowingPosts } from "../../Actions/User";
+import { getAllUsers, getFollowingPosts, loadUser } from "../../Actions/User";
 import User from "../User/User";
 import CommentCard from "../CommentCard/CommentCard";
 import { getmyposts } from "../../Actions/User";
@@ -72,6 +72,7 @@ const Post = ({
   const deletePosthandler = async () => {
     await dispatch(deletePost(postId));
     dispatch(getmyposts());
+    dispatch(loadUser());
   };
 
   useEffect(() => {
