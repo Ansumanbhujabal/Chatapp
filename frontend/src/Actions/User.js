@@ -46,6 +46,30 @@ export const loginUser = (email, password) => async (dispatch) => {
   }
 };
 
+export const updateProfile =
+  (name, email, password, avatar) => async (dispatch) => {
+    try {
+      dispatch({ type: "UpdateProfileRequest" });
+
+      const { data } = await axios.put(
+        "/api/v1/update/profile",
+        { name, email, avatar },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      dispatch({ type: "UpdateProfileSuccess", payload: data.message });
+    } catch (error) {
+      dispatch({
+        type: "UpdateProfileFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
 export const loadUser = () => async (dispatch) => {
   try {
     dispatch({
@@ -122,6 +146,7 @@ export const getmyposts = () => async (dispatch) => {
     });
   }
 };
+
 export const logoutUser = () => async (dispatch) => {
   try {
     dispatch({
