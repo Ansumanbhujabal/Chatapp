@@ -173,7 +173,7 @@ exports.updatePassword = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const loggedinUser = await user.findById(req.user._id).select("+name");
-    const { name, email } = req.body;
+    const { name, email, avatar } = req.body;
     if (name) {
       loggedinUser.name = name;
     }
@@ -181,7 +181,14 @@ exports.updateProfile = async (req, res) => {
       loggedinUser.email = email;
     }
 
-    //avatar
+    if (avatar) {
+      await cloudinary.v2.uploader.destroy(loggedinUser.avatar.public_id);
+      const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+        folder: "avatars",
+      });
+      loggedinUser.avatar.public_id = myCloud.public_id;
+      loggedinUser.avatar.url = myCloud.secure_url;
+    }
 
     await loggedinUser.save();
     res.status(200).json({
