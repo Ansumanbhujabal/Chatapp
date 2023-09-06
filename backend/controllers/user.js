@@ -172,7 +172,7 @@ exports.updatePassword = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const loggedinUser = await user.findById(req.user._id).select("+name");
+    const loggedinUser = await user.findById(req.user._id);
     const { name, email, avatar } = req.body;
     if (name) {
       loggedinUser.name = name;
