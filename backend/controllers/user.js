@@ -210,6 +210,10 @@ exports.deleteMyProfile = async (req, res) => {
     const followersOfuser = loggedinUser.followers;
     const userId = loggedinUser._id;
     const userFollowing = loggedinUser.following;
+
+    //removing avatar from cloudinary
+    await cloudinary.v2.uploader.destroy(loggedinUser.avatar.public_id);
+
     await user.deleteOne({ _id: req.user._id });
 
     //logout user after delete
@@ -223,6 +227,7 @@ exports.deleteMyProfile = async (req, res) => {
 
     for (let i = 0; i < userPost.length; i++) {
       const onePost = await post.findById(userPost[i]);
+      await cloudinary.v2.uploader.destroy(onePost.image.public_id);
       await onePost.deleteOne();
     }
 
