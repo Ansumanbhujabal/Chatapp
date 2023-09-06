@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Account.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getmyposts, logoutUser } from "../../Actions/User";
+import {
+  deleteProfile,
+  getmyposts,
+  loadUser,
+  logoutUser,
+} from "../../Actions/User";
 import Loader from "../Loader/Loader";
 import Post from "../Post/Post";
 import User from "../User/User";
@@ -13,7 +18,11 @@ const Account = () => {
   const dispatch = useDispatch();
   const { user, loading: userLoading } = useSelector((state) => state.user);
   const { loading, error, posts } = useSelector((state) => state.myPosts);
-  const { error: likeError, message } = useSelector((state) => state.like);
+  const {
+    error: likeError,
+    message,
+    loading: deleteLoading,
+  } = useSelector((state) => state.like);
 
   const [followersToggle, setFollowersToggle] = useState(false);
 
@@ -24,8 +33,9 @@ const Account = () => {
   };
 
   const deleteProfileHandler = async () => {
-    // await dispatch(deleteMyProfile());
-    dispatch(logoutUser());
+    await dispatch(deleteProfile());
+    dispatch(loadUser());
+    toast.success("Deleted successfully");
   };
 
   useEffect(() => {
@@ -109,7 +119,7 @@ const Account = () => {
           variant="text"
           style={{ color: "red", margin: "2vmax" }}
           onClick={deleteProfileHandler}
-          // disabled={deleteLoading}
+          disabled={deleteLoading}
         >
           Delete My Profile
         </Button>
