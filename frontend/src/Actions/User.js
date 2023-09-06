@@ -188,3 +188,23 @@ export const logoutUser = () => async (dispatch) => {
     });
   }
 };
+
+export const deleteProfile = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "DeleteProfileRequest",
+    });
+
+    const { data } = await axios.delete("/api/v1/delete/me");
+
+    dispatch({
+      type: "DeleteProfileSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "DeleteProfileFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
