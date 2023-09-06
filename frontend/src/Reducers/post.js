@@ -83,6 +83,19 @@ export const likeReducer = createReducer(initialState, {
     state.loading = false;
     state.error = action.payload;
   },
+  DeleteProfileRequest: (state) => {
+    state.loading = true;
+  },
+  DeleteProfileSuccess: (state, action) => {
+    state.loading = false;
+    state.user = action.payload;
+    state.isAuthenticated = true;
+  },
+  DeleteProfileFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+    state.isAuthenticated = false;
+  },
 
   updatePasswordRequest: (state) => {
     state.loading = true;
