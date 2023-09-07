@@ -34,7 +34,8 @@ const Account = () => {
 
   const deleteProfileHandler = async () => {
     await dispatch(deleteProfile());
-    dispatch(loadUser());
+    await dispatch(loadUser());
+
     toast.success("Deleted successfully");
   };
 
