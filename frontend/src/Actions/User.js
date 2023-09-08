@@ -1,4 +1,5 @@
 import axios from "axios";
+import { application, json } from "express";
 export const registerUser =
   (name, email, password, avatar) => async (dispatch) => {
     try {
@@ -204,6 +205,36 @@ export const deleteProfile = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "DeleteProfileFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const forgotpassword = (email) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "ForgotPasswordRequest",
+    });
+
+    const { data } = await axios.post(
+      "/api/v1/forgot/password",
+      {
+        email,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    dispatch({
+      type: "ForgotPasswordSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "ForgotPasswordFailure",
       payload: error.response.data.message,
     });
   }
